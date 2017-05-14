@@ -2,8 +2,8 @@
 /*
 Plugin Name: Paid Memberships Pro
 Plugin URI: http://www.paidmembershipspro.com
-Description: Plugin to Handle Memberships
-Version: 1.7.3.1
+Description: Contains file changes to the core, do not attempt upgrade.. Edits by jameel@gowebsolutions.com.
+Version: 9999
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
@@ -95,14 +95,21 @@ $membership_levels = $wpdb->get_results( "SELECT * FROM {$wpdb->pmpro_membership
 */
 function pmpro_activation()
 {
-	wp_schedule_event(time(), 'daily', 'pmpro_cron_expiration_warnings');
-	//wp_schedule_event(time(), 'daily', 'pmpro_cron_trial_ending_warnings');		//this warning has been deprecated since 1.7.2
-	wp_schedule_event(time(), 'daily', 'pmpro_cron_expire_memberships');
+// JB: the following should be daily, I have changed them to hourly for debugging 10/22/2013
+	wp_schedule_event(time(), 'hourly', 'pmpro_cron_expiration_warnings_30');
+	wp_schedule_event(time(), 'hourly', 'pmpro_cron_expiration_warnings_60');
+	// jameel: added above 2 lines and commented out line below
+	// wp_schedule_event(time(), 'hourly', 'pmpro_cron_expiration_warnings');
+	//wp_schedule_event(time(), 'hourly', 'pmpro_cron_trial_ending_warnings');		//this warning has been deprecated since 1.7.2
+	wp_schedule_event(time(), 'hourly', 'pmpro_cron_expire_memberships');
 	wp_schedule_event(time(), 'monthly', 'pmpro_cron_credit_card_expiring_warnings');
 }
 function pmpro_deactivation()
 {
-	wp_clear_scheduled_hook('pmpro_cron_expiration_warnings');
+	wp_clear_scheduled_hook('pmpro_cron_expiration_warnings_30');
+	wp_clear_scheduled_hook('pmpro_cron_expiration_warnings_60');
+	// jameel: added above 2 lines and commented out line below
+	// wp_clear_scheduled_hook('pmpro_cron_expiration_warnings');
 	wp_clear_scheduled_hook('pmpro_cron_trial_ending_warnings');
 	wp_clear_scheduled_hook('pmpro_cron_expire_memberships');
 	wp_clear_scheduled_hook('pmpro_cron_credit_card_expiring_warnings');
