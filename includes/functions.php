@@ -1,7 +1,4 @@
 <?php
-
-// error_reporting(0); //might need for exporting
-
 if(!function_exists("sornot"))
 
 {
