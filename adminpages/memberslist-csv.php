@@ -67,7 +67,7 @@
 	
 	$theusers = $wpdb->get_results($sqlQuery);	
 
-	$heading = "id,username,firstname,lastname,email,billing firstname,billing lastname,address1,address2,city,state,zipcode,country,phone,membership,initial payment,fee,term,discount_code_id,discount_code,joined,expires";
+	$heading = "id,username,firstname,lastname,email,billing firstname,billing lastname,organization,address1,address2,city,state,zipcode,country,phone,membership,initial payment,fee,term,discount_code_id,discount_code,count,tag,AKF,joined,expires";
 	$heading = apply_filters("pmpro_members_list_csv_heading", $heading);
 	$csvoutput = $heading;
 	
@@ -80,6 +80,7 @@
 		array("theuser", "user_email"),
 		array("metavalues", "pmpro_bfirstname"),
 		array("metavalues", "pmpro_blastname"),
+		array("metavalues", "uxf_organization"),
 		array("metavalues", "pmpro_baddress1"),
 		array("metavalues", "pmpro_baddress2"),
 		array("metavalues", "pmpro_bcity"),
@@ -92,7 +93,10 @@
 		array("theuser", "billing_amount"),
 		array("theuser", "cycle_period"),
 		array("discount_code", "id"),
-		array("discount_code", "code")
+		array("discount_code", "code"),
+		array("metavalues", "uxf_count"),
+		array("metavalues", "uxf_specialtags"),
+		array("metavalues", "uxf_akf")
 		//joindate and enddate are handled specifically below
 	);
 
@@ -135,7 +139,7 @@
 						
 					//checking $object->property. note the double $$
 					if(!empty($$col[0]->$col[1]))
-						$csvoutput .= pmpro_enclose($$col[0]->$col[1]);	//output the value				
+						$csvoutput .= pmpro_enclose(strval($$col[0]->$col[1]));	//output the value				
 				}
 			}
 									
